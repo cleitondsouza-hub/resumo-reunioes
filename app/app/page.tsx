@@ -31,7 +31,7 @@ export default function Home() {
         setStatus('Resumo gerado com sucesso! (exemplo)');
         setResult(
           data.summary ||
-    `🧾 Resumo da Reunião
+            `🧾 Resumo da Reunião
 
 📌 Decisões
 - Seguir com o projeto piloto
@@ -46,8 +46,7 @@ export default function Home() {
 
 📅 Prazos
 - Entrega do piloto: 15/03`
-);
-
+        );
       }, 1000);
     } catch (err) {
       setStatus('Erro ao processar o áudio.');
@@ -58,16 +57,51 @@ export default function Home() {
     <main style={{ padding: 40, maxWidth: 800, margin: '0 auto' }}>
       <h1>ResumoAI (MVP)</h1>
 
-      <input
-        type="file"
-        accept="audio/*"
-        onChange={(e) => setFile(e.target.files?.[0] || null)}
-      />
+      {/* Botão para escolher arquivo */}
+      <label
+        style={{
+          display: 'inline-block',
+          padding: '10px 16px',
+          background: '#2563eb',
+          color: '#fff',
+          borderRadius: 6,
+          cursor: 'pointer',
+          fontWeight: 'bold',
+        }}
+      >
+        📁 Escolher áudio
+        <input
+          type="file"
+          accept="audio/*"
+          style={{ display: 'none' }}
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+      </label>
+
+      {/* Nome do arquivo selecionado */}
+      {file && (
+        <p style={{ marginTop: 8 }}>
+          Arquivo selecionado: <strong>{file.name}</strong>
+        </p>
+      )}
 
       <br /><br />
 
-      <button onClick={handleUpload}>
-        Enviar áudio
+      {/* Botão principal */}
+      <button
+        onClick={handleUpload}
+        style={{
+          padding: '12px 20px',
+          background: '#16a34a',
+          color: '#fff',
+          borderRadius: 6,
+          border: 'none',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          fontSize: 16,
+        }}
+      >
+        ✨ Gerar resumo
       </button>
 
       <p style={{ marginTop: 16 }}>{status}</p>
@@ -87,7 +121,6 @@ export default function Home() {
           {result}
         </div>
       )}
-
 
       <p style={{ marginTop: 24, fontSize: 12, color: '#666' }}>
         ⚠️ Versão de teste: o resumo exibido é um exemplo enquanto validamos a ideia.
