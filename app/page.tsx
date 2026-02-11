@@ -17,7 +17,7 @@ export default function LandingPage() {
           Ideal para gestores e líderes de times remotos que fazem muitas reuniões no Zoom, Meet ou Teams.
         </p>
         <a
-          href="/"
+          href="/app"
           style={{
             display: 'inline-block',
             marginTop: 20,
@@ -79,7 +79,7 @@ export default function LandingPage() {
         <h2>Pronto para ganhar tempo nas suas reuniões?</h2>
         <p>Teste gratuitamente o ResumoAI e veja como é fácil transformar reuniões em ações claras.</p>
         <a
-          href="/"
+          href="/app"
           style={{
             display: 'inline-block',
             marginTop: 16,
