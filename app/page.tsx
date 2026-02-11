@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function LandingPage() {
   return (
     <main style={{ padding: 40, maxWidth: 900, margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
@@ -16,7 +18,8 @@ export default function LandingPage() {
         <p style={{ marginTop: 8, color: '#555' }}>
           Ideal para gestores e líderes de times remotos que fazem muitas reuniões no Zoom, Meet ou Teams.
         </p>
-        <a
+
+        <Link
           href="/app"
           style={{
             display: 'inline-block',
@@ -30,7 +33,8 @@ export default function LandingPage() {
           }}
         >
           Quero testar gratuitamente
-        </a>
+        </Link>
+
       </section>
 
       {/* Problema */}
@@ -78,7 +82,7 @@ export default function LandingPage() {
       <section style={{ textAlign: 'center', padding: 40, background: '#f5f7ff', borderRadius: 8 }}>
         <h2>Pronto para ganhar tempo nas suas reuniões?</h2>
         <p>Teste gratuitamente o ResumoAI e veja como é fácil transformar reuniões em ações claras.</p>
-        <a
+        <Link
           href="/app"
           style={{
             display: 'inline-block',
@@ -92,7 +96,8 @@ export default function LandingPage() {
           }}
         >
           Testar agora
-        </a>
+        </Link>
+
       </section>
     </main>
   );
