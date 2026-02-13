@@ -6,52 +6,56 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState('');
   const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
   async function handleUpload() {
-    if (!file) {
-      alert('Selecione um arquivo de áudio');
+  if (!file) {
+    alert('Selecione um arquivo de áudio');
+    return;
+  }
+
+  setLoading(true);
+  setStatus('Processando áudio e gerando resumo...');
+  setResult('');
+
+  const formData = new FormData();
+  formData.append('audio', file);
+
+  try {
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!data.text) {
+      setStatus('Erro ao transcrever o áudio.');
       return;
     }
 
-    setStatus('Processando áudio e gerando resumo...');
-    setResult('');
+    const res2 = await fetch('/api/summarize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: data.text }),
+    });
 
-    const formData = new FormData();
-    formData.append('audio', file);
-
-    try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      setTimeout(() => {
-        setStatus('Resumo gerado com sucesso! (exemplo)');
-        setResult(
-          data.summary ||
-            `🧾 Resumo da Reunião
-
-📌 Decisões
-- Seguir com o projeto piloto
-- Priorizar o módulo de relatórios
-
-✅ Próximos Passos
-- João: definir escopo até sexta-feira
-- Maria: validar orçamento com o financeiro
-
-⚠️ Pontos de Atenção
-- Prazo apertado para entrega inicial
-
-📅 Prazos
-- Entrega do piloto: 15/03`
-        );
-      }, 1000);
-    } catch (err) {
-      setStatus('Erro ao processar o áudio.');
+    if (!res2.ok) {
+      setStatus('Erro ao gerar o resumo com IA.');
+      return;
     }
+
+    const data2 = await res2.json();
+
+    setStatus('Resumo gerado com sucesso!');
+    setResult(data2.summary);
+  } catch (err) {
+    setStatus('Erro ao processar o áudio.');
+  } finally {
+    setLoading(false); // ✅ só libera o botão quando tudo acabar
   }
+}
 
   return (
     <main style={{ padding: 40, maxWidth: 800, margin: '0 auto' }}>
@@ -90,13 +94,15 @@ export default function Home() {
       {/* Botão principal */}
       <button
         onClick={handleUpload}
+        disabled={loading}
         style={{
+        opacity: loading ? 0.6 : 1,
+        cursor: loading ? 'not-allowed' : 'pointer',
           padding: '12px 20px',
           background: '#16a34a',
           color: '#fff',
           borderRadius: 6,
           border: 'none',
-          cursor: 'pointer',
           fontWeight: 'bold',
           fontSize: 16,
         }}
@@ -123,7 +129,7 @@ export default function Home() {
       )}
 
       <p style={{ marginTop: 24, fontSize: 12, color: '#666' }}>
-        ⚠️ Versão de teste: o resumo exibido é um exemplo enquanto validamos a ideia.
+        ⚠️ Versão de teste: o resumo é gerado por IA e pode conter imprecisões.
       </p>
     </main>
   );

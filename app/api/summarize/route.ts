@@ -1,39 +1,38 @@
 import { NextResponse } from 'next/server';
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const transcription = body.transcription;
+    const { text } = await req.json();
 
-    if (!transcription) {
-      return NextResponse.json({ error: 'Transcrição não enviada' }, { status: 400 });
+    if (!text) {
+      return NextResponse.json({ error: 'Texto não enviado' }, { status: 400 });
     }
 
-    // Simula processamento
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-
-    return NextResponse.json({
-      summary: `🧪 Resumo automático da reunião (mock)
-
-📌 Tema principal:
-Alinhamento do projeto de MVP
-
-✅ Decisões:
-- Avançar com a versão inicial do produto
-- Validar com usuários reais
-
-🛠️ Próximas ações:
-- Criar landing page
-- Ajustar fluxo de upload de áudio
-- Testar com 3 pessoas
-
-👥 Responsáveis:
-- Você (produto)
-- Futuro usuário (feedback)
-`,
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content:
+            'Você é um assistente que gera resumos de reuniões em português, com seções: Decisões, Próximos Passos (com responsáveis), Pontos de Atenção e Prazos.',
+        },
+        {
+          role: 'user',
+          content: text,
+        },
+      ],
     });
+
+    const summary = completion.choices[0].message.content;
+
+    return NextResponse.json({ summary });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Erro ao gerar resumo (mock)' }, { status: 500 });
+    return NextResponse.json({ error: 'Erro ao gerar resumo' }, { status: 500 });
   }
 }
