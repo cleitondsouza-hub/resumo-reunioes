@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
@@ -13,6 +9,10 @@ export async function POST(req: Request) {
     if (!file) {
       return NextResponse.json({ error: 'Arquivo não enviado' }, { status: 400 });
     }
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     // Converter File para Buffer
     const bytes = await file.arrayBuffer();
