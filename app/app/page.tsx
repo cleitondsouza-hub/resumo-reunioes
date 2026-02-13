@@ -50,11 +50,36 @@ export default function Home() {
 
     setStatus('Resumo gerado com sucesso!');
     setResult(data2.summary);
+    console.log('Resumo da IA:', data2.summary);
+
   } catch (err) {
     setStatus('Erro ao processar o áudio.');
   } finally {
     setLoading(false); // ✅ só libera o botão quando tudo acabar
   }
+}
+
+function parseSummary(summary: string) {
+  const blocks = summary.split('\n\n'); // separa por blocos
+
+  return blocks.map((block) => {
+    const lines = block.split('\n');
+    const title = lines[0].replace(':', '').trim();
+    const content = lines.slice(1).join('\n').trim();
+
+    return { title, content };
+  });
+}
+
+function getIcon(title: string) {
+  const t = title.toLowerCase();
+
+  if (t.includes('decis')) return '📌';
+  if (t.includes('próxim') || t.includes('proxim')) return '✅';
+  if (t.includes('aten')) return '⚠️';
+  if (t.includes('prazo')) return '📅';
+
+  return '📝'; // padrão
 }
 
   return (
@@ -113,20 +138,80 @@ export default function Home() {
       <p style={{ marginTop: 16 }}>{status}</p>
 
       {result && (
-        <div
-          style={{
-            marginTop: 24,
-            background: '#f8fafc',
-            padding: 20,
-            borderRadius: 8,
-            border: '1px solid #e5e7eb',
-            lineHeight: 1.6,
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          {result}
+        <div style={{ marginTop: 24, display: 'grid', gap: 16 }}>
+            {parseSummary(result).map((section, index) => (
+                <div
+                    key={index}
+                    style={{
+                        background: '#f8fafc',
+                        padding: 16,
+                        borderRadius: 10,
+                        border: '1px solid #e5e7eb',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                    }}
+                >
+                    <h3 style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span>{getIcon(section.title)}</span>
+                        <span>{section.title}</span>
+                    </h3>
+
+                    <p style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+                        {section.content}
+                    </p>
+                </div>
+            ))}
         </div>
-      )}
+    )}
+
+    {result && (
+  <button
+    onClick={() => {
+      navigator.clipboard.writeText(result);
+      alert('Resumo copiado para a área de transferência!');
+    }}
+    style={{
+      marginTop: 16,
+      padding: '10px 16px',
+      background: '#0f172a',
+      color: '#fff',
+      borderRadius: 6,
+      border: 'none',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+    }}
+  >
+    📋 Copiar resumo
+  </button>
+)}
+
+{result && (
+  <button
+    onClick={() => {
+      const blob = new Blob([result], { type: 'text/plain;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resumo-reuniao.txt'; // depois podemos mudar para PDF se quiser
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }}
+    style={{
+      marginTop: 12,
+      marginLeft: 12,
+      padding: '10px 16px',
+      background: '#2563eb',
+      color: '#fff',
+      borderRadius: 6,
+      border: 'none',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+    }}
+  >
+    ⬇️ Baixar resumo
+  </button>
+)}
 
       <p style={{ marginTop: 24, fontSize: 12, color: '#666' }}>
         ⚠️ Versão de teste: o resumo é gerado por IA e pode conter imprecisões.
