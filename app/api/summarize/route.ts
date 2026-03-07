@@ -18,22 +18,33 @@ export async function POST(req: Request) {
   messages: [
     {
       role: 'system',
-      content: 'Você é um assistente que cria resumos profissionais de reuniões para gestores.'
-    },
-    {
-      role: 'user',
-      content: `
-Transforme a transcrição abaixo em um resumo estruturado para um líder de equipe.
+      content: 'Você é um assistente especialista em criar resumos executivos de reuniões para líderes e gestores.'
+        },
+        {
+          role: 'user',
+          content: `
+Analise a transcrição de reunião abaixo e gere um resumo claro e estruturado.
 
-Siga EXATAMENTE este formato (sem markdown, sem **negrito**, sem títulos extras):
+O objetivo é permitir que um gestor entenda rapidamente:
+- o que foi decidido
+- quais são as tarefas
+- quais riscos ou pontos de atenção existem
+- quais prazos foram mencionados
+
+IMPORTANTE:
+- Não invente informações
+- Não invente nomes de responsáveis
+- Seja objetivo
+- Use frases curtas
+
+Formato obrigatório da resposta:
 
 Decisões:
 - ...
 
 Próximos passos:
-- Liste tarefas com responsáveis quando isso estiver claro na transcrição.
-- Se não houver responsável explícito, escreva apenas a tarefa sem nome.
-- Não invente responsáveis.
+- Tarefa — Responsável (se mencionado)
+- Se não houver responsável claro, escreva apenas a tarefa
 
 Pontos de atenção:
 - ...
@@ -41,13 +52,7 @@ Pontos de atenção:
 Prazos:
 - ...
 
-Regras:
-- Não use **negrito**
-- Não use markdown
-- Seja objetivo
-- Não invente informações
-
-Transcrição:
+Transcrição da reunião:
 ${text}
       `
     }
