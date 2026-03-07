@@ -8,6 +8,8 @@ export default function Home() {
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
   const [processingTime, setProcessingTime] = useState<number | null>(null);
+  const [tasks, setTasks] = useState('');
+  const [minutes, setMinutes] = useState('');
 
   async function handleUpload() {
     if (!file) {
@@ -123,6 +125,63 @@ ${result}
     win.print();
   }
 
+  async function extractTasks() {
+
+  const res = await fetch('/api/extract-tasks', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ text: result })
+  })
+
+  const data = await res.json()
+
+  setTasks(data.tasks)
+}
+
+async function generateMinutes() {
+
+  const res = await fetch('/api/generate-minutes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ text: result })
+  })
+
+  const data = await res.json()
+
+  setMinutes(data.minutes)
+}
+
+async function sendEmail() {
+
+  const email = prompt("Digite o email")
+
+  await fetch('/api/send-email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email,
+      content: result
+    })
+  })
+
+  alert("Email enviado")
+}
+
+const actionButtonStyle = {
+  padding: '10px 16px',
+  borderRadius: 6,
+  border: 'none',
+  cursor: 'pointer',
+  fontWeight: 'bold',
+  color: '#fff',
+};
+
   return (
     <main style={{ padding: 40, maxWidth: 800, margin: '0 auto' }}>
       <h1>ResumoAI (MVP)</h1>
@@ -211,40 +270,67 @@ ${result}
         </div>
       )}
 
-      {result && (
-        <div style={{ marginTop: 20, display: 'flex', gap: 12 }}>
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(result);
-              alert('Resumo copiado!');
-            }}
-            style={{
-              padding: '10px 16px',
-              background: '#0f172a',
-              color: '#fff',
-              borderRadius: 6,
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-            }}
-          >
-            📋 Copiar resumo
-          </button>
+      {tasks && (
+        <div style={{ marginTop: 30 }}>
+          <h2>📋 Tarefas extraídas</h2>
+          <pre>{tasks}</pre>
+        </div>
+      )}
 
-          <button
-            onClick={downloadPDF}
-            style={{
-              padding: '10px 16px',
-              background: '#2563eb',
-              color: '#fff',
-              borderRadius: 6,
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-            }}
-          >
-            ⬇️ Baixar PDF
-          </button>
+      {minutes && (
+        <div style={{ marginTop: 30 }}>
+          <h2>📝 Ata da reunião</h2>
+          <pre>{minutes}</pre>
+        </div>
+      )}
+
+      {result && (
+        <div style={{ marginTop: 24 }}>
+
+          <h3 style={{ marginBottom: 12 }}>Ações</h3>
+
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(result);
+                alert('Resumo copiado!');
+              }}
+              style={{ ...actionButtonStyle, background: '#0f172a' }}
+            >
+              📋 Copiar resumo
+            </button>
+
+            <button
+              onClick={downloadPDF}
+              style={{ ...actionButtonStyle, background: '#2563eb' }}
+            >
+              ⬇️ Baixar PDF
+            </button>
+
+            <button
+              onClick={extractTasks}
+              style={{ ...actionButtonStyle, background: '#7c3aed' }}
+            >
+              📋 Extrair tarefas
+            </button>
+
+            <button
+              onClick={generateMinutes}
+              style={{ ...actionButtonStyle, background: '#ea580c' }}
+            >
+              📝 Gerar ata
+            </button>
+
+            <button
+              onClick={sendEmail}
+              style={{ ...actionButtonStyle, background: '#0ea5e9' }}
+            >
+              ✉️ Enviar por email
+            </button>
+
+          </div>
+
         </div>
       )}
 
