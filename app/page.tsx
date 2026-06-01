@@ -37,10 +37,10 @@ export default function LandingPage() {
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all">
                 <a
-                  href="/app"
+                  href="#formulario"
                   className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all inline-block"
                 >
-                  Quero testar gratuitamente
+                  Participar da validação gratuita
                 </a>
               </button>
 
@@ -240,7 +240,7 @@ export default function LandingPage() {
       </section>
 
       {/* FORM */}
-      <section className="py-24 px-6">
+      <section id="formulario" className="py-24 px-6">
         <div className="max-w-3xl mx-auto bg-white border border-slate-200 rounded-3xl p-10 shadow-2xl">
           <div className="text-center mb-10">
             <h2 className="text-4xl font-bold mb-4">
