@@ -1,4 +1,53 @@
+'use client';
+
+import { useState } from 'react';
+
 export default function LandingPage() {
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('');
+  const [meetings, setMeetings] = useState('1 a 3 reuniões');
+  const [challenge, setChallenge] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          role,
+          meetings,
+          challenge,
+        }),
+      });
+
+      if (res.ok) {
+        setSuccess(true);
+
+        setName('');
+        setEmail('');
+        setRole('');
+        setMeetings('1 a 3 reuniões');
+        setChallenge('');
+      }
+    } catch (error) {
+      alert('Erro ao enviar.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-white text-slate-900">
       {/* HERO */}
@@ -252,7 +301,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block font-semibold mb-2">
                 Nome
@@ -260,6 +309,8 @@ export default function LandingPage() {
               <input
                 type="text"
                 placeholder="Seu nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -271,6 +322,8 @@ export default function LandingPage() {
               <input
                 type="email"
                 placeholder="voce@empresa.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -282,6 +335,8 @@ export default function LandingPage() {
               <input
                 type="text"
                 placeholder="Ex: Coordenador, Líder, Gerente"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
                 className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -290,7 +345,11 @@ export default function LandingPage() {
               <label className="block font-semibold mb-2">
                 Quantas reuniões você participa por semana?
               </label>
-              <select className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500">
+              <select
+                value={meetings}
+                onChange={(e) => setMeetings(e.target.value)}
+                className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
+              >
                 <option>1 a 3 reuniões</option>
                 <option>4 a 7 reuniões</option>
                 <option>8 a 15 reuniões</option>
@@ -298,9 +357,47 @@ export default function LandingPage() {
               </select>
             </div>
 
-            <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-5 rounded-xl font-bold text-lg shadow-lg transition-all">
-              Quero participar da validação
+            <div>
+              <label className="block font-semibold mb-2">
+                Qual seu maior desafio com reuniões?
+              </label>
+
+              <select
+                value={challenge}
+                onChange={(e) => setChallenge(e.target.value)}
+                className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                <option value="">Selecione</option>
+                <option>Perco decisões importantes</option>
+                <option>Não acompanho responsáveis</option>
+                <option>Gasto tempo criando atas</option>
+                <option>Esqueço próximos passos</option>
+                <option>Outro</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-5 rounded-xl font-bold text-lg shadow-lg transition-all"
+            >
+              {loading
+                ? 'Enviando...'
+                : 'Solicitar acesso gratuito'}
             </button>
+
+            <p className="text-center text-sm text-slate-500">
+              ✓ Gratuito durante a fase de validação<br />
+              ✓ Sem cartão de crédito<br />
+              ✓ Acesso liberado em até 24 horas
+            </p>
+
+            {success && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-emerald-800">
+                Obrigado! Recebemos seu interesse e entraremos em contato em breve para disponibilizar o acesso à validação.
+              </div>
+            )}
+
           </form>
 
           <p className="text-center text-sm text-slate-500 mt-6">
