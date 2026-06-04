@@ -3,19 +3,14 @@
 import Script from 'next/script'
 
 export default function MetaPixel() {
-
-  const pixelId =
-    process.env.NEXT_PUBLIC_META_PIXEL_ID
-  
-  console.log('PIXEL ID:', pixelId)
+  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
 
   return (
-    <>
-      <Script
-        id="facebook-pixel"
-        strategy="afterInteractive"
-      >
-        {`
+    <Script
+      id="facebook-pixel"
+      strategy="afterInteractive"
+      dangerouslySetInnerHTML={{
+        __html: `
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){
           n.callMethod?
@@ -35,8 +30,8 @@ export default function MetaPixel() {
 
           fbq('init', '${pixelId}');
           fbq('track', 'PageView');
-        `}
-      </Script>
-    </>
+        `,
+      }}
+    />
   )
 }
