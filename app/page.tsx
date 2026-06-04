@@ -33,6 +33,14 @@ export default function LandingPage() {
       });
 
       if (res.ok) {
+
+        if (
+          typeof window !== 'undefined' &&
+          (window as any).fbq
+        ) {
+          (window as any).fbq('track', 'Lead');
+        }
+
         setSuccess(true);
 
         setName('');
