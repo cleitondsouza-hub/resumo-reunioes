@@ -5,6 +5,11 @@ import Script from 'next/script'
 export default function MetaPixel() {
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
 
+console.log(
+  'PIXEL VERCEL:',
+  process.env.NEXT_PUBLIC_META_PIXEL_ID
+)
+
   return (
     <Script
       id="facebook-pixel"
