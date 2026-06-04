@@ -6,6 +6,8 @@ export default function MetaPixel() {
 
   const pixelId =
     process.env.NEXT_PUBLIC_META_PIXEL_ID
+  
+  console.log('PIXEL ID:', pixelId)
 
   return (
     <>
