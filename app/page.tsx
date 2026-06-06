@@ -7,7 +7,6 @@ export default function LandingPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('');
-  const [meetings, setMeetings] = useState('1 a 3 reuniões');
   const [challenge, setChallenge] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -27,7 +26,6 @@ export default function LandingPage() {
           name,
           email,
           role,
-          meetings,
           challenge,
         }),
       });
@@ -46,7 +44,6 @@ export default function LandingPage() {
         setName('');
         setEmail('');
         setRole('');
-        setMeetings('1 a 3 reuniões');
         setChallenge('');
       }
     } catch (error) {
@@ -63,11 +60,11 @@ export default function LandingPage() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              🚀 MVP em validação com líderes e gestores
+              🚀 Acesso gratuito durante a fase de validação
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold leading-tight tracking-tight">
-              Transforme reuniões em decisões claras.
+              Envie o áudio da reunião e receba decisões, tarefas e responsáveis automaticamente..
             </h1>
 
             <p className="mt-6 text-xl text-slate-600 leading-relaxed">
@@ -97,7 +94,7 @@ export default function LandingPage() {
                   href="#formulario"
                   className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg transition-all inline-block"
                 >
-                  Participar da validação gratuita
+                  Solicitar acesso gratuito
                 </a>
               </button>
 
@@ -107,7 +104,7 @@ export default function LandingPage() {
             </div>
 
             <p className="mt-4 text-sm text-slate-500">
-              Sem integração. Sem configuração. Só subir o áudio.
+              Validando o MVP com líderes, coordenadores e gestores de equipe.
             </p>
           </div>
 
@@ -296,6 +293,55 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="py-20 px-6 bg-slate-50">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-12">
+            Perguntas frequentes
+          </h2>
+
+          <div className="space-y-8">
+
+            <div>
+              <h3 className="font-bold text-lg">
+                Preciso integrar com Teams ou Zoom?
+              </h3>
+              <p className="text-slate-600 mt-2">
+                Não. Basta enviar o áudio da reunião.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-lg">
+                Quanto tempo leva para gerar o resumo?
+              </h3>
+              <p className="text-slate-600 mt-2">
+                Normalmente menos de 2 minutos.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-bold text-lg">
+                Quanto custa?
+              </h3>
+              <p className="text-slate-600 mt-2">
+                Durante a fase de validação o acesso é gratuito.
+              </p>
+            </div>
+
+              <div>
+                <h3 className="font-bold text-lg">
+                  O que acontece após o cadastro?
+                </h3>
+                <p className="text-slate-600 mt-2">
+                  Entraremos em contato para liberar o acesso gratuito e coletar seu feedback sobre a ferramenta.
+                </p>
+              </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* FORM */}
       <section id="formulario" className="py-24 px-6">
         <div className="max-w-3xl mx-auto bg-white border border-slate-200 rounded-3xl p-10 shadow-2xl">
@@ -351,22 +397,6 @@ export default function LandingPage() {
 
             <div>
               <label className="block font-semibold mb-2">
-                Quantas reuniões você participa por semana?
-              </label>
-              <select
-                value={meetings}
-                onChange={(e) => setMeetings(e.target.value)}
-                className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option>1 a 3 reuniões</option>
-                <option>4 a 7 reuniões</option>
-                <option>8 a 15 reuniões</option>
-                <option>Mais de 15 reuniões</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block font-semibold mb-2">
                 Qual seu maior desafio com reuniões?
               </label>
 
@@ -402,7 +432,9 @@ export default function LandingPage() {
 
             {success && (
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-emerald-800">
-                Obrigado! Recebemos seu interesse e entraremos em contato em breve para disponibilizar o acesso à validação.
+                🎉 Cadastro realizado com sucesso!
+
+                Nossa equipe entrará em contato em breve para liberar seu acesso gratuito ao MVP.
               </div>
             )}
 
