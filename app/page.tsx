@@ -99,7 +99,12 @@ export default function LandingPage() {
               </button>
 
               <button className="border border-slate-300 hover:border-slate-400 px-8 py-4 rounded-xl font-semibold text-lg transition-all">
-                Ver exemplo
+                <a
+                  href="#como-funciona"
+                  className="border border-slate-300 hover:border-slate-400 px-8 py-4 rounded-xl font-semibold text-lg transition-all inline-block"
+                >
+                  Como funciona
+                </a>
               </button>
             </div>
 
@@ -195,7 +200,10 @@ export default function LandingPage() {
       </section>
 
       {/* COMO FUNCIONA */}
-      <section className="py-20 px-6 max-w-6xl mx-auto">
+      <section
+        id="como-funciona"
+        className="py-20 px-6 max-w-6xl mx-auto"
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
             Como funciona
