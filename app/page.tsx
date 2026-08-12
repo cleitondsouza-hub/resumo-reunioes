@@ -14,6 +14,16 @@ export default function LandingPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (
+      !name.trim() ||
+      !email.trim() ||
+      !role.trim() ||
+      !challenge
+    ) {
+      alert('Por favor, preencha todos os campos.');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -373,6 +383,7 @@ export default function LandingPage() {
                 placeholder="Seu nome"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
                 className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -386,6 +397,7 @@ export default function LandingPage() {
                 placeholder="voce@empresa.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
                 className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -399,6 +411,7 @@ export default function LandingPage() {
                 placeholder="Ex: Coordenador, Líder, Gerente"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
+                required
                 className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -411,6 +424,7 @@ export default function LandingPage() {
               <select
                 value={challenge}
                 onChange={(e) => setChallenge(e.target.value)}
+                required
                 className="w-full border border-slate-300 rounded-xl px-4 py-4 outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="">Selecione</option>
